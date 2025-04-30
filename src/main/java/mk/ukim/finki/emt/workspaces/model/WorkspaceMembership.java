@@ -1,6 +1,9 @@
 package mk.ukim.finki.emt.workspaces.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.jdbc.Work;
 
 @Entity
 public class WorkspaceMembership {
@@ -8,17 +11,48 @@ public class WorkspaceMembership {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Workspace workspace;
     @Enumerated(EnumType.STRING)
     private Role role;
 
     public WorkspaceMembership(){}
 
+    public WorkspaceMembership(User user, Workspace workspace) {
+        this.user = user;
+        this.workspace = workspace;
+    }
+
     public WorkspaceMembership(User user, Workspace workspace, Role role) {
         this.user = user;
         this.workspace = workspace;
+        this.role = role;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Workspace getWorkspace() {
+        return workspace;
+    }
+
+    public void setWorkspace(Workspace workspace) {
+        this.workspace = workspace;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
         this.role = role;
     }
 }

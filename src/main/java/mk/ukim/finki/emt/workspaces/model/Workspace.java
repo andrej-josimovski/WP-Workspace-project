@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -21,6 +23,10 @@ public class Workspace {
 
     public Workspace(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {

@@ -1,7 +1,6 @@
 package mk.ukim.finki.emt.workspaces.service.impl;
 
 import mk.ukim.finki.emt.workspaces.model.Workspace;
-import mk.ukim.finki.emt.workspaces.model.exceptions.WorkspaceNotFoundException;
 import mk.ukim.finki.emt.workspaces.repository.WorkspaceRepository;
 import mk.ukim.finki.emt.workspaces.service.WorkspaceService;
 import org.springframework.stereotype.Service;
@@ -33,20 +32,23 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     @Override
-    public Optional<Workspace> save(String name) {
-        if (name == null || name.isEmpty()) {
+    public Optional<Workspace> save(Workspace workspace) {
+        if (workspace.getName() == null || workspace.getName().isEmpty()) {
             throw new IllegalArgumentException();
         }
-        Workspace workspace = new Workspace(name);
-        return Optional.of(this.workspaceRepository.save(workspace));
+        Workspace workspace1 = new Workspace(workspace.getName());
+        return Optional.of(this.workspaceRepository.save(workspace1));
     }
 
     @Override
-    public Optional<Workspace> update(Long id, String name) {
-        if (id == null || name==null || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        Workspace workspace = this.workspaceRepository.findById(id).orElseThrow(() -> new WorkspaceNotFoundException(id));
-        return Optional.of(this.workspaceRepository.save(workspace));
+    public Optional<Workspace> update(Long id, Workspace workspace) {
+        return workspaceRepository.findById(id)
+                .map(existingWorkspace -> {
+                    if (workspace.getName() != null) {
+                        existingWorkspace.setName(workspace.getName());
+                    }
+                    return workspaceRepository.save(existingWorkspace);
+
+                });
     }
 }

@@ -33,23 +33,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> save(String name, String password, String email) {
-        if (name == null || name.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
+    public Optional<User> save(User user) {
+        if (user.getName() == null || user.getName().isEmpty() || user.getPassword() == null || user.getPassword().isEmpty() || user.getEmail() == null || user.getEmail().isEmpty()) {
             throw new IllegalArgumentException();
         }
-        User user = new User(name, password, email);
-        return Optional.of(this.userRepository.save(user));
+        User user1 = new User(user.getName(), user.getPassword(), user.getEmail());
+        return Optional.of(this.userRepository.save(user1));
     }
 
     @Override
-    public Optional<User> update(Long id, String name, String password, String email) {
-        if (id == null || name == null || name.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        User user= this.userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
-        user.setName(name);
-        user.setPassword(password);
-        user.setEmail(email);
-        return Optional.of(this.userRepository.save(user));
+    public Optional<User> update(Long id, User user) {
+        return userRepository.findById(id)
+                .map(existingUser -> {
+                    if (user.getName() != null && !user.getName().isEmpty()) {
+                        existingUser.setName(user.getName());
+                    }
+                    if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+                        existingUser.setPassword(user.getPassword());
+                    }
+                    if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+                        existingUser.setEmail(user.getEmail());
+                    }
+                    return userRepository.save(existingUser);
+                });
     }
 }
