@@ -34,41 +34,45 @@ public class WorkspaceMembershipServiceImpl implements WorkspaceMembershipServic
     }
 
     @Override
-    public Optional<WorkspaceMembership> findById(Long id) {
-        return workspaceMembershipRepository.findById(id);
-    }
-
-    @Override
-    public Optional<WorkspaceMembership> addMember(Long workspaceId, Long memberId) {
-        if (workspaceId==null || memberId==null){
+    public Optional<WorkspaceMembership> addMember(Long workspaceId, Long memberId, Role role) {
+        if (workspaceId==null || memberId==null || role==null) {
             throw new IllegalArgumentException();
         }
         Workspace workspace = this.workspaceRepository.findById(workspaceId).orElseThrow(() -> new WorkspaceNotFoundException(workspaceId));
         User user= this.userRepository.findById(memberId).orElseThrow(()-> new UserNotFoundException(memberId));
+        boolean alreadyExists= workspaceMembershipRepository.existsByWorkspaceIdAndUserId(workspace.getId(), user.getId());
+        if (alreadyExists) {
+            throw new IllegalStateException("This user is already member of this workspace");
+        }
 
-        WorkspaceMembership workspaceMembership = new WorkspaceMembership(user, workspace);
+        WorkspaceMembership workspaceMembership = new WorkspaceMembership(user, workspace, role);
         return Optional.of(this.workspaceMembershipRepository.save(workspaceMembership));
     }
 
     @Override
     public void removeMember(Long workspaceId, Long memberId) {
-        Workspace workspace = this.workspaceRepository.findById(workspaceId).orElseThrow(() -> new WorkspaceNotFoundException(workspaceId));
-        User user= this.userRepository.findById(memberId).orElseThrow(()-> new UserNotFoundException(memberId));
-
-        WorkspaceMembership workspaceMembership = new WorkspaceMembership(user, workspace);
-        this.workspaceMembershipRepository.delete(workspaceMembership);
+        WorkspaceMembership workspaceMembership = workspaceMembershipRepository
+                .findByWorkspaceIdAndUserId(workspaceId, memberId)
+                .orElseThrow(() -> new WorkspaceNotFoundException(workspaceId));
+        workspaceMembershipRepository.delete(workspaceMembership);
     }
 
     @Override
     public Optional<WorkspaceMembership> updateRole(Long workspaceId, Long memberId, Role newRole) {
-        Workspace workspace = this.workspaceRepository.findById(workspaceId).orElseThrow(() -> new WorkspaceNotFoundException(workspaceId));
-        User user= this.userRepository.findById(memberId).orElseThrow(()-> new UserNotFoundException(memberId));
-        WorkspaceMembership workspaceMembership = new WorkspaceMembership(user, workspace);
-
-        workspaceMembership.setWorkspace(workspace);
-        workspaceMembership.setUser(user);
+        WorkspaceMembership workspaceMembership=workspaceMembershipRepository
+                .findByWorkspaceIdAndUserId(workspaceId, memberId)
+                .orElseThrow(() -> new WorkspaceNotFoundException(workspaceId));
         workspaceMembership.setRole(newRole);
-
         return Optional.of(this.workspaceMembershipRepository.save(workspaceMembership));
+    }
+
+    @Override
+    public List<WorkspaceMembership> findAllByWorkspaceId(Long workspaceId) {
+        return workspaceMembershipRepository.findAllByWorkspaceId(workspaceId);
+    }
+
+    @Override
+    public Optional<WorkspaceMembership> findByWorkspaceIdAndUserId(Long workspaceId, Long userId) {
+        return workspaceMembershipRepository.findByWorkspaceIdAndUserId(workspaceId, userId);
     }
 }

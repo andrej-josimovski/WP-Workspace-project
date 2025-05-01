@@ -21,15 +21,14 @@ public class WorkspaceMembership {
 
     public WorkspaceMembership(){}
 
-    public WorkspaceMembership(User user, Workspace workspace) {
-        this.user = user;
-        this.workspace = workspace;
-    }
-
     public WorkspaceMembership(User user, Workspace workspace, Role role) {
         this.user = user;
         this.workspace = workspace;
         this.role = role;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public User getUser() {

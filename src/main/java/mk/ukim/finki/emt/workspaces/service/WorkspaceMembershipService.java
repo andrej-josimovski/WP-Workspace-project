@@ -7,9 +7,11 @@ import java.util.*;
 
 public interface WorkspaceMembershipService {
     List<WorkspaceMembership> findAll();
-    Optional<WorkspaceMembership> findById(Long id);
-    Optional<WorkspaceMembership> addMember(Long workspaceId, Long memberId);
+    Optional<WorkspaceMembership> addMember(Long workspaceId, Long memberId, Role role);
     void removeMember(Long workspaceId, Long memberId);
     Optional<WorkspaceMembership> updateRole(Long workspaceId, Long memberId, Role newRole);
+    List<WorkspaceMembership> findAllByWorkspaceId(Long workspaceId);
+    Optional<WorkspaceMembership> findByWorkspaceIdAndUserId(Long workspaceId, Long userId);
+
 
 }

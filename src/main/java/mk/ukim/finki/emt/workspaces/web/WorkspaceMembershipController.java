@@ -2,7 +2,6 @@ package mk.ukim.finki.emt.workspaces.web;
 
 import mk.ukim.finki.emt.workspaces.model.Role;
 import mk.ukim.finki.emt.workspaces.model.WorkspaceMembership;
-import mk.ukim.finki.emt.workspaces.service.UserService;
 import mk.ukim.finki.emt.workspaces.service.WorkspaceMembershipService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +13,9 @@ import java.util.List;
 public class WorkspaceMembershipController {
 
     private final WorkspaceMembershipService membershipService;
-    private final UserService userService;
 
-    public WorkspaceMembershipController(WorkspaceMembershipService membershipService, UserService userService) {
+    public WorkspaceMembershipController(WorkspaceMembershipService membershipService) {
         this.membershipService = membershipService;
-        this.userService = userService;
     }
 
     @GetMapping
@@ -26,16 +23,21 @@ public class WorkspaceMembershipController {
         return membershipService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<WorkspaceMembership> findById(@PathVariable Long id) {
-        return membershipService.findById(id)
+    @GetMapping("/{workspaceId}")
+    public List<WorkspaceMembership> findByWorkspaceId(@PathVariable Long workspaceId) {
+        return membershipService.findAllByWorkspaceId(workspaceId);
+    }
+
+    @GetMapping("/{workspaceId}/{userId}")
+    public ResponseEntity<WorkspaceMembership> findByUserIdAndWorkspaceId(@PathVariable Long workspaceId, @PathVariable Long userId) {
+        return membershipService.findByWorkspaceIdAndUserId(workspaceId, userId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/add")
-    public ResponseEntity<WorkspaceMembership> add(@RequestParam Long workspaceId, @RequestParam Long userId) {
-        return membershipService.addMember(workspaceId, userId)
+    public ResponseEntity<WorkspaceMembership> add(@RequestParam Long workspaceId, @RequestParam Long userId, @RequestParam Role role) {
+        return membershipService.addMember(workspaceId, userId, role)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -49,7 +51,7 @@ public class WorkspaceMembershipController {
 
     @DeleteMapping("/delete/{workspaceId}/{userId}")
     public ResponseEntity<Void> delete(@PathVariable Long workspaceId, @PathVariable Long userId) {
-        if (membershipService.findById(workspaceId).isPresent() && userService.findById(userId).isPresent()) {
+        if (membershipService.findByWorkspaceIdAndUserId(workspaceId, userId).isPresent()) {
             membershipService.removeMember(workspaceId, userId);
             return ResponseEntity.ok().build();
         }else {

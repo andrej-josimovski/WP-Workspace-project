@@ -21,6 +21,10 @@ public class Workspace {
 
     public Workspace() {}
 
+    public Long getId() {
+        return id;
+    }
+
     public Workspace(String name) {
         this.name = name;
     }
