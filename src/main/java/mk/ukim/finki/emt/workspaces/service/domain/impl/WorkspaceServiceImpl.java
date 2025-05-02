@@ -1,8 +1,8 @@
-package mk.ukim.finki.emt.workspaces.service.impl;
+package mk.ukim.finki.emt.workspaces.service.domain.impl;
 
-import mk.ukim.finki.emt.workspaces.model.Workspace;
+import mk.ukim.finki.emt.workspaces.model.domain.Workspace;
 import mk.ukim.finki.emt.workspaces.repository.WorkspaceRepository;
-import mk.ukim.finki.emt.workspaces.service.WorkspaceService;
+import mk.ukim.finki.emt.workspaces.service.domain.WorkspaceService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

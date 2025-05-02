@@ -1,9 +1,8 @@
-package mk.ukim.finki.emt.workspaces.service.impl;
+package mk.ukim.finki.emt.workspaces.service.domain.impl;
 
-import mk.ukim.finki.emt.workspaces.model.User;
-import mk.ukim.finki.emt.workspaces.model.exceptions.UserNotFoundException;
+import mk.ukim.finki.emt.workspaces.model.domain.User;
 import mk.ukim.finki.emt.workspaces.repository.UserRepository;
-import mk.ukim.finki.emt.workspaces.service.UserService;
+import mk.ukim.finki.emt.workspaces.service.domain.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

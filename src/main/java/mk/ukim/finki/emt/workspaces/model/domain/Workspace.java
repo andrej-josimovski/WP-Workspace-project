@@ -1,11 +1,9 @@
-package mk.ukim.finki.emt.workspaces.model;
+package mk.ukim.finki.emt.workspaces.model.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 

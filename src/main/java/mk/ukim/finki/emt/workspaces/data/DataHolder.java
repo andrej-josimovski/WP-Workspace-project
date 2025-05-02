@@ -1,10 +1,10 @@
 package mk.ukim.finki.emt.workspaces.data;
 
 import jakarta.annotation.PostConstruct;
-import mk.ukim.finki.emt.workspaces.model.Role;
-import mk.ukim.finki.emt.workspaces.model.User;
-import mk.ukim.finki.emt.workspaces.model.Workspace;
-import mk.ukim.finki.emt.workspaces.model.WorkspaceMembership;
+import mk.ukim.finki.emt.workspaces.model.enumerations.Role;
+import mk.ukim.finki.emt.workspaces.model.domain.User;
+import mk.ukim.finki.emt.workspaces.model.domain.Workspace;
+import mk.ukim.finki.emt.workspaces.model.domain.WorkspaceMembership;
 import mk.ukim.finki.emt.workspaces.repository.UserRepository;
 import mk.ukim.finki.emt.workspaces.repository.WorkspaceMembershipRepository;
 import mk.ukim.finki.emt.workspaces.repository.WorkspaceRepository;

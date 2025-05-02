@@ -1,9 +1,7 @@
-package mk.ukim.finki.emt.workspaces.model;
+package mk.ukim.finki.emt.workspaces.model.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -25,6 +23,10 @@ public class User {
     public User(String name, String password, String email) {
         this.name = name;
         this.password = password;
+        this.email = email;
+    }
+    public User(String name, String email){
+        this.name = name;
         this.email = email;
     }
 

@@ -1,6 +1,6 @@
-package mk.ukim.finki.emt.workspaces.service;
+package mk.ukim.finki.emt.workspaces.service.domain;
 
-import mk.ukim.finki.emt.workspaces.model.Workspace;
+import mk.ukim.finki.emt.workspaces.model.domain.Workspace;
 
 import java.util.List;
 import java.util.Optional;

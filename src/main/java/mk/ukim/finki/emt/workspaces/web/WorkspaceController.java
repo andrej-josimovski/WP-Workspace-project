@@ -1,7 +1,10 @@
 package mk.ukim.finki.emt.workspaces.web;
 
-import mk.ukim.finki.emt.workspaces.model.Workspace;
-import mk.ukim.finki.emt.workspaces.service.WorkspaceService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import mk.ukim.finki.emt.workspaces.model.dto.CreateWorkspaceDto;
+import mk.ukim.finki.emt.workspaces.model.dto.DisplayWorkspaceDto;
+import mk.ukim.finki.emt.workspaces.service.application.WorkspaceApplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,45 +12,51 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/workspace")
+@Tag(name = "Workspace API", description = "Endpoints for managing workspaces.")
 public class WorkspaceController {
 
-    private final WorkspaceService workspaceService;
+    private final WorkspaceApplicationService workspaceApplicationService;
 
 
-    public WorkspaceController(WorkspaceService workspaceService) {
-        this.workspaceService = workspaceService;
+    public WorkspaceController(WorkspaceApplicationService workspaceApplicationService) {
+        this.workspaceApplicationService = workspaceApplicationService;
     }
 
+    @Operation(summary = "Get all workspaces", description = "Retrieves a list of all available workspaces.")
     @GetMapping
-    public List<Workspace> getAll(){
-        return workspaceService.findAll();
+    public List<DisplayWorkspaceDto> findAll(){
+        return workspaceApplicationService.findAll();
     }
 
+    @Operation(summary = "Get workspace by ID", description = "Finds a workspace by its ID.")
     @GetMapping("/{id}")
-    public ResponseEntity<Workspace> findById(@PathVariable Long id){
-        return workspaceService.findById(id)
+    public ResponseEntity<DisplayWorkspaceDto> findById(@PathVariable Long id){
+        return workspaceApplicationService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Add a new workspace", description = "Creates a new workspace based on the given WorkspaceDto.")
     @PostMapping("/add")
-    public ResponseEntity<Workspace> save(@RequestBody Workspace workspace){
-        return workspaceService.save(workspace)
+    public ResponseEntity<DisplayWorkspaceDto> save(@RequestBody CreateWorkspaceDto workspaceDto){
+        return workspaceApplicationService.save(workspaceDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(()->ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Updates an existing workspace", description = "Updates a workspace by its ID.")
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Workspace> update (@PathVariable Long id, @RequestBody Workspace workspace){
-        return workspaceService.update(id, workspace)
+    public ResponseEntity<DisplayWorkspaceDto> update (@PathVariable Long id, @RequestBody CreateWorkspaceDto workspaceDto){
+        return workspaceApplicationService.update(id, workspaceDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(()->ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Delete a workspace", description = "Deletes a workspace by its ID.")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
-        if (workspaceService.findById(id).isPresent()){
-            workspaceService.deleteById(id);
+        if (workspaceApplicationService.findById(id).isPresent()){
+            workspaceApplicationService.deleteById(id);
             return ResponseEntity.ok().build();
         }else{
             return ResponseEntity.notFound().build();

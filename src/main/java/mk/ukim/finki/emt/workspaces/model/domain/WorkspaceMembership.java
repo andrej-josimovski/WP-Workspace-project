@@ -1,9 +1,9 @@
-package mk.ukim.finki.emt.workspaces.model;
+package mk.ukim.finki.emt.workspaces.model.domain;
 
 import jakarta.persistence.*;
+import mk.ukim.finki.emt.workspaces.model.enumerations.Role;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.jdbc.Work;
 
 @Entity
 public class WorkspaceMembership {
