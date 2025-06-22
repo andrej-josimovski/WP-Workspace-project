@@ -13,7 +13,7 @@ public class WorkspaceMembership {
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Workspace workspace;
     @Enumerated(EnumType.STRING)

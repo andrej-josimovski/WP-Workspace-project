@@ -1,4 +1,4 @@
-package mk.ukim.finki.emt.workspaces.data;
+package mk.ukim.finki.emt.workspaces.config.data;
 
 import jakarta.annotation.PostConstruct;
 import mk.ukim.finki.emt.workspaces.model.enumerations.Role;

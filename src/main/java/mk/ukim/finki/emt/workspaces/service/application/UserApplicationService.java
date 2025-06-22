@@ -1,7 +1,7 @@
 package mk.ukim.finki.emt.workspaces.service.application;
 
-import mk.ukim.finki.emt.workspaces.model.dto.CreateUserDto;
-import mk.ukim.finki.emt.workspaces.model.dto.DisplayUserDto;
+import mk.ukim.finki.emt.workspaces.model.domain.User;
+import mk.ukim.finki.emt.workspaces.model.dto.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,4 +12,10 @@ public interface UserApplicationService {
     void deleteById(Long id);
     Optional<DisplayUserDto> findById(Long id);
     List<DisplayUserDto> findAll();
+    Optional<RegisterUserResponseDto> register(RegisterUserRequestDto registerUserRequestDto);
+
+    Optional<LoginUserResponseDto> login(LoginUserRequestDto loginUserRequestDto);
+
+    Optional<RegisterUserResponseDto> findByUsername(String username);
+
 }

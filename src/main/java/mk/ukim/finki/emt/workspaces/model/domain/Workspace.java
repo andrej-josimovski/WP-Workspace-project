@@ -14,7 +14,7 @@ public class Workspace {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
-    @OneToMany(mappedBy = "workspace")
+    @OneToMany(mappedBy = "workspace", cascade = CascadeType.ALL, orphanRemoval = true)
     List<WorkspaceMembership> memberships;
 
     public Workspace() {}

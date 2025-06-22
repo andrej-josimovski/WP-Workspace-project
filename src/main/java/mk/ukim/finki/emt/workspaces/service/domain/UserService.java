@@ -11,5 +11,7 @@ public interface UserService {
     Optional<User> save(User user);
     Optional<User> update(Long id, User user);
     void deleteById(Long id);
-
+    User register(User user);
+    User login(String username, String password);
+    Optional<User> findByUsername(String username);
 }

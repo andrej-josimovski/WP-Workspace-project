@@ -1,11 +1,14 @@
-package mk.ukim.finki.emt.workspaces.web;
+package mk.ukim.finki.emt.workspaces.web.controlers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import mk.ukim.finki.emt.workspaces.model.domain.User;
 import mk.ukim.finki.emt.workspaces.model.dto.CreateWorkspaceDto;
 import mk.ukim.finki.emt.workspaces.model.dto.DisplayWorkspaceDto;
+import mk.ukim.finki.emt.workspaces.model.exceptions.AccessDeniedException;
 import mk.ukim.finki.emt.workspaces.service.application.WorkspaceApplicationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,17 +49,17 @@ public class WorkspaceController {
 
     @Operation(summary = "Updates an existing workspace", description = "Updates a workspace by its ID.")
     @PutMapping("/edit/{id}")
-    public ResponseEntity<DisplayWorkspaceDto> update (@PathVariable Long id, @RequestBody CreateWorkspaceDto workspaceDto){
-        return workspaceApplicationService.update(id, workspaceDto)
+    public ResponseEntity<DisplayWorkspaceDto> update (@PathVariable Long id, @RequestBody CreateWorkspaceDto workspaceDto, @AuthenticationPrincipal User currentUser) throws AccessDeniedException {
+        return workspaceApplicationService.update(id, workspaceDto, currentUser.getId())
                 .map(ResponseEntity::ok)
                 .orElseGet(()->ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Delete a workspace", description = "Deletes a workspace by its ID.")
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal User currentUser) throws AccessDeniedException {
         if (workspaceApplicationService.findById(id).isPresent()){
-            workspaceApplicationService.deleteById(id);
+            workspaceApplicationService.deleteById(id, currentUser.getId());
             return ResponseEntity.ok().build();
         }else{
             return ResponseEntity.notFound().build();

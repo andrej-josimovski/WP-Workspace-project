@@ -2,6 +2,7 @@ package mk.ukim.finki.emt.workspaces.service.application.impl;
 
 import mk.ukim.finki.emt.workspaces.model.dto.CreateWorkspaceDto;
 import mk.ukim.finki.emt.workspaces.model.dto.DisplayWorkspaceDto;
+import mk.ukim.finki.emt.workspaces.model.exceptions.AccessDeniedException;
 import mk.ukim.finki.emt.workspaces.service.application.WorkspaceApplicationService;
 import mk.ukim.finki.emt.workspaces.service.domain.WorkspaceService;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,8 @@ public class WorkspaceApplicationServiceImpl implements WorkspaceApplicationServ
     }
 
     @Override
-    public void deleteById(Long id) {
-        workspaceService.deleteById(id);
+    public void deleteById(Long id, Long requestingUserId) throws AccessDeniedException {
+        workspaceService.deleteById(id, requestingUserId);
     }
 
     @Override
@@ -40,8 +41,8 @@ public class WorkspaceApplicationServiceImpl implements WorkspaceApplicationServ
     }
 
     @Override
-    public Optional<DisplayWorkspaceDto> update(Long id, CreateWorkspaceDto createWorkspaceDto) {
-        return workspaceService.update(id, createWorkspaceDto.toWorkspace())
+    public Optional<DisplayWorkspaceDto> update(Long id, CreateWorkspaceDto createWorkspaceDto, Long requestingUserId) throws AccessDeniedException {
+        return workspaceService.update(id, createWorkspaceDto.toWorkspace(), requestingUserId)
                 .map(DisplayWorkspaceDto::from);
     }
 }
