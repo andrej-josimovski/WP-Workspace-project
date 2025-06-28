@@ -1,0 +1,73 @@
+import {useCallback, useEffect, useState} from "react";
+import workspaceMembershipRepository from "../repository/workspaceMembershipRepository.js";
+
+const initialState = {
+    "memberships": [],
+    "loading": true,
+};
+
+const useMemberships = () => {
+    const [state, setState] = useState(initialState);
+
+    const fetchMemberships = useCallback(() => {
+        setState(initialState);
+        workspaceMembershipRepository
+            .findAll()
+            .then((response) => {
+                setState({
+                    "memberships": response.data,
+                    "loading": false,
+                });
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    const onAddMember = useCallback((workspaceId, memberId, role) => {
+        workspaceMembershipRepository
+            .addMember(workspaceId, memberId, role)
+            .then(() => {
+                fetchMemberships();
+            })
+            .catch((error) => console.log(error));
+    }, [fetchMemberships]);
+
+    const onCreateWorkspace = useCallback((name, ownerId) => {
+        workspaceMembershipRepository
+            .createWorkspace(name, ownerId)
+            .then(() => {
+                fetchMemberships();
+            })
+            .catch((error) => console.log(error));
+    }, [fetchMemberships]);
+
+    const onUpdateRole = useCallback((workspaceId, memberId, role) => {
+        workspaceMembershipRepository
+            .updateRole(workspaceId, memberId, role)
+            .then(() => {
+                fetchMemberships();
+            })
+            .catch((error) => console.log(error));
+    }, [fetchMemberships]);
+
+    const onDeleteMember = useCallback((workspaceId, memberId) => {
+        workspaceMembershipRepository
+            .deleteMember(workspaceId, memberId)
+            .then(() => {
+                fetchMemberships();
+            })
+            .catch((error) => console.log(error));
+    }, [fetchMemberships]);
+
+    useEffect(() => {
+        fetchMemberships();
+    }, [fetchMemberships]);
+
+    return {
+        ...state,
+        onAddMember: onAddMember,
+        onUpdateRole: onUpdateRole,
+        onDeleteMember: onDeleteMember,
+        onCreateWorkspace: onCreateWorkspace
+    }
+}
+export default useMemberships;
