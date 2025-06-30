@@ -3,34 +3,33 @@ import workspaceRepository from "../repository/workspaceRepository.js";
 import workspaceMembershipRepository from "../repository/workspaceMembershipRepository.js";
 
 const useWorkspaceDetails = (id) => {
-    const [state, setState] = useState({
-        "workspace": null,
-        "memberships": [],
-    });
+    const [workspace, setWorkspace] = useState(null);
+    const [memberships, setMemberships] = useState([]);
+
+    const fetchData = async () => {
+        try {
+            const res = await workspaceRepository.findById(id);
+            setWorkspace(res.data);
+        } catch (err) {
+            console.error("Workspace fetch error:", err);
+        }
+    };
+
+    const fetchMemberships = async () => {
+        try {
+            const res = await workspaceMembershipRepository.findByWorkspaceId(id);
+            setMemberships(res.data);
+        } catch (err) {
+            console.error("Membership fetch error:", err);
+        }
+    };
 
     useEffect(() => {
-        workspaceRepository
-            .findById(id)
-            .then((response) => {
-                setState(prevState => ({
-                    ...prevState,
-                    "workspace": response.data
-                }));
-
-                workspaceMembershipRepository
-                    .findByWorkspaceId(id)
-                    .then((res) => {
-                        setState(prevState => ({
-                            ...prevState,
-                            "memberships": res.data
-                        }));
-                    })
-                    .catch((error) => console.log("Membership fetch error:", error));
-            })
-            .catch((error) => console.log("Workspace fetch error:", error));
+        fetchData();
+        fetchMemberships();
     }, [id]);
 
-    return state;
+    return {workspace, memberships, refetchMemberships: fetchMemberships};
 };
 
 export default useWorkspaceDetails;

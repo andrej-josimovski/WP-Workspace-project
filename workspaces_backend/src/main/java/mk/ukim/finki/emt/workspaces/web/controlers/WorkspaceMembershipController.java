@@ -58,8 +58,9 @@ public class WorkspaceMembershipController {
 
     @PostMapping("/create")
     public ResponseEntity<Workspace> createWorkspace(@RequestParam String name,
-                                                     @RequestParam Long ownerId) {
-        Workspace workspace = workspaceMembershipApplicationService.createWorkspace(name, ownerId);
+                                                     @AuthenticationPrincipal User ownerId) {
+        System.out.println("Authenticated user" + ownerId);
+        Workspace workspace = workspaceMembershipApplicationService.createWorkspace(name, ownerId.getId());
         return ResponseEntity.ok(workspace);
     }
 

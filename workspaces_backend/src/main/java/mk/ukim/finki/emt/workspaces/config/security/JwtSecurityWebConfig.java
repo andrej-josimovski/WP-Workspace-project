@@ -65,8 +65,8 @@ public class JwtSecurityWebConfig {
                                         "/api/workspace/membership",
                                         "/api/workspace/membership/{workspaceId}",
                                         "/api/workspace/membership/{workspaceId}/{userId}",
-                                        "api/content",
-                                        "api/content/{id}"
+                                        "/api/content",
+                                        "/api/content/{id}"
                                 )
                                 .permitAll()
                                 .requestMatchers("/api/user/add",

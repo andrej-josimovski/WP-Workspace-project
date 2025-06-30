@@ -4,9 +4,6 @@ const workspaceMembershipRepository = {
     findAll: async () => {
         return await axiosInstance.get("/workspace/membership");
     },
-    findByWorkspaceAndUser: async (workspaceId, userId) => {
-        return await axiosInstance.get(`/workspace/membership/${workspaceId}/${userId}`);
-    },
     findByWorkspaceId: async (workspaceId) => {
       return await axiosInstance.get(`/workspace/membership/${workspaceId}`)
     },
@@ -19,12 +16,9 @@ const workspaceMembershipRepository = {
             },
         });
     },
-    createWorkspace: async (name, ownerId) => {
-        return await axiosInstance.post(`/workspace/membership/create`, null, {
-            params: {
-                name,
-                ownerId,
-            },
+    createWorkspace: async (name) => {
+        return await axiosInstance.post('/workspace/membership/create', null, {
+            params: { name }
         });
     },
     updateRole: async (workspaceId, memberId, role) => {

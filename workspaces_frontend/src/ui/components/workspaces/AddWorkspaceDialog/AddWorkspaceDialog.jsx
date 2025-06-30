@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
     Button,
     Dialog,
@@ -8,42 +8,41 @@ import {
     TextField
 } from "@mui/material";
 
-const initialFormData = {
-    "name": "name",
-};
-
-const AddWorkspaceDialog = ({open, onClose, onAdd}) => {
-    const [formData, setFormData] = useState(initialFormData);
+const AddWorkspaceDialog = ({ open, onClose, onAdd }) => {
+    const [name, setName] = useState("");
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
-        setFormData({...formData, [name]: value});
+        setName(event.target.value);
     };
 
     const handleSubmit = () => {
-        onAdd(formData);
-        setFormData(initialFormData);
+        if (!name.trim()) return; // Optional: prevent empty names
+        onAdd(name); // Only send the name, backend knows current user
+        setName("");
         onClose();
     };
 
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Add Product</DialogTitle>
+            <DialogTitle>Add Workspace</DialogTitle>
             <DialogContent>
                 <TextField
                     margin="dense"
-                    label="Name"
+                    label="Workspace Name"
                     name="name"
-                    value={formData.name}
+                    value={name}
                     onChange={handleChange}
                     fullWidth
                 />
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={handleSubmit} variant="contained" color="primary">Add</Button>
+                <Button onClick={handleSubmit} variant="contained" color="primary">
+                    Add
+                </Button>
             </DialogActions>
         </Dialog>
     );
 };
+
 export default AddWorkspaceDialog;

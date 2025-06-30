@@ -22,26 +22,24 @@ const useMemberships = () => {
             .catch((error) => console.log(error));
     }, []);
 
-    const onAddMember = useCallback((workspaceId, memberId, role) => {
-        workspaceMembershipRepository
-            .addMember(workspaceId, memberId, role)
+    const onAddMember = useCallback((workspaceId, userId, role) => {
+        return workspaceMembershipRepository
+            .addMember(workspaceId, userId, role)
+            .then(fetchMemberships);
+    }, [fetchMemberships]);
+
+    const onCreateWorkspace = useCallback((name) => {
+        return workspaceMembershipRepository
+            .createWorkspace(name)  // just name now
             .then(() => {
                 fetchMemberships();
             })
             .catch((error) => console.log(error));
     }, [fetchMemberships]);
 
-    const onCreateWorkspace = useCallback((name, ownerId) => {
-        workspaceMembershipRepository
-            .createWorkspace(name, ownerId)
-            .then(() => {
-                fetchMemberships();
-            })
-            .catch((error) => console.log(error));
-    }, [fetchMemberships]);
 
     const onUpdateRole = useCallback((workspaceId, memberId, role) => {
-        workspaceMembershipRepository
+        return workspaceMembershipRepository
             .updateRole(workspaceId, memberId, role)
             .then(() => {
                 fetchMemberships();
@@ -50,13 +48,14 @@ const useMemberships = () => {
     }, [fetchMemberships]);
 
     const onDeleteMember = useCallback((workspaceId, memberId) => {
-        workspaceMembershipRepository
+        return workspaceMembershipRepository
             .deleteMember(workspaceId, memberId)
             .then(() => {
                 fetchMemberships();
             })
             .catch((error) => console.log(error));
     }, [fetchMemberships]);
+
 
     useEffect(() => {
         fetchMemberships();

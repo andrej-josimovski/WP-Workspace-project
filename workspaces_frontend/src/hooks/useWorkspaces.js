@@ -66,7 +66,7 @@ const useWorkspaces = () => {
         fetchWorkspaces();
     }, [fetchWorkspaces]);
 
-    return {...state, onAdd: onAdd, onEdit: onEdit, onAddContent: onAddContent, onDelete: onDelete};
+    return {...state, onAdd: onAdd, onEdit: onEdit, onAddContent: onAddContent, onDelete: onDelete, fetchWorkspaces};
 
 };
 export default useWorkspaces;
