@@ -15,7 +15,7 @@ import {ArrowBack} from "@mui/icons-material";
 import useWorkspaceDetails from "../../../../hooks/useWorkspaceDetails.js";
 import useWorkspaceMemberships from "../../../../hooks/useWorkspaceMemberships.js";
 import useWorkspaces from "../../../../hooks/useWorkspaces.js";
-import AddMemberDialog from "../AddMemberDialog/AddMemberDialog.jsx";
+import AddMemberDialog from "../../members/AddMemberDialog/AddMemberDialog.jsx";
 import UpdateRoleDialog from "../UpdateRoleDialog/UpdateRoleDialog.jsx";
 import AddContentDialog from "../../contents/AddContentDialog/AddContentDialog.jsx";
 import DeleteContentDialog from "../../contents/DeleteContentDialog/DeleteContentDialog.jsx";
@@ -99,7 +99,7 @@ const WorkspaceDetails = () => {
     const handleDeleteContent = (contentId) => {
         onDeleteContent(workspace.id, contentId)
             .then(() => {
-                refetchWorkspace();  // Refresh content after deletion
+                refetchWorkspace();
                 setDeleteDialogOpen(false);
             })
             .catch((error) => {
@@ -138,7 +138,7 @@ const WorkspaceDetails = () => {
             <Paper elevation={2} sx={{p: 4, borderRadius: 4}}>
                 <Grid container spacing={4}>
                     <Grid item xs={12} md={3}>
-                        {/* Optional: Workspace image or info */}
+                        {/* image or something */}
                     </Grid>
 
                     <Grid item xs={12} md={9}>
@@ -149,7 +149,7 @@ const WorkspaceDetails = () => {
                             Description placeholder...
                         </Typography>
 
-                        {/* Memberships Header and Add Button */}
+                        {/* Membership*/}
                         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                             <Typography variant="h5">Memberships</Typography>
                             <Button variant="contained" onClick={() => setAddDialogOpen(true)}>
@@ -157,7 +157,7 @@ const WorkspaceDetails = () => {
                             </Button>
                         </Box>
 
-                        {/* Memberships list with fixed height + scroll */}
+                        {/* Memberships */}
                         <Grid container spacing={2}>
                             {memberships.map((membership) => (
                                 <Grid item xs={12} sm={6} md={4} lg={3} key={membership.id}>
@@ -193,7 +193,7 @@ const WorkspaceDetails = () => {
                         </Grid>
 
 
-                        {/* Content Header and Add Button */}
+                        {/* Content */}
                         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                             <Typography variant="h5">Content</Typography>
                             <Button variant="contained" onClick={() => setAddContentDialogOpen(true)}>
@@ -201,7 +201,7 @@ const WorkspaceDetails = () => {
                             </Button>
                         </Box>
 
-                        {/* Content list with fixed height + scroll and vertical list */}
+                        {/* Contents */}
                         {workspace.contents && workspace.contents.length > 0 ? (
                             <Box
                                 sx={{
