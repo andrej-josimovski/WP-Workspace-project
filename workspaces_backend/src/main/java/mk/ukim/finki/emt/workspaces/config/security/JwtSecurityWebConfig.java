@@ -79,6 +79,7 @@ public class JwtSecurityWebConfig {
                                         "/api/workspace/add",
                                         "/api/workspace/edit/{id}",
                                         "/api/workspace/add-content/{workspaceId}",
+                                        "/api/workspace/delete-content/{workspaceId}/{contentId}",
                                         "/api/workspace/delete/{id}",
                                         "/api/workspace/membership/add",
                                         "/api/workspace/membership/create",

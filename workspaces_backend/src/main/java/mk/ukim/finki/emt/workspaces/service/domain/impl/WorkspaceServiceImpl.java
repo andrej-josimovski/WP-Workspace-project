@@ -6,7 +6,9 @@ import mk.ukim.finki.emt.workspaces.model.domain.Workspace;
 import mk.ukim.finki.emt.workspaces.model.domain.WorkspaceMembership;
 import mk.ukim.finki.emt.workspaces.model.enumerations.Role;
 import mk.ukim.finki.emt.workspaces.model.exceptions.AccessDeniedException;
+import mk.ukim.finki.emt.workspaces.model.exceptions.ContentNotFoundException;
 import mk.ukim.finki.emt.workspaces.model.exceptions.WorkspaceNotFoundException;
+import mk.ukim.finki.emt.workspaces.repository.ContentRepository;
 import mk.ukim.finki.emt.workspaces.repository.UserRepository;
 import mk.ukim.finki.emt.workspaces.repository.WorkspaceMembershipRepository;
 import mk.ukim.finki.emt.workspaces.repository.WorkspaceRepository;
@@ -14,6 +16,7 @@ import mk.ukim.finki.emt.workspaces.service.domain.WorkspaceService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,11 +25,13 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private final WorkspaceRepository workspaceRepository;
     private final WorkspaceMembershipRepository workspaceMembershipRepository;
     private final UserRepository userRepository;
+    private final ContentRepository contentRepository;
 
-    public WorkspaceServiceImpl(WorkspaceRepository workspaceRepository, WorkspaceMembershipRepository workspaceMembershipRepository, UserRepository userRepository) {
+    public WorkspaceServiceImpl(WorkspaceRepository workspaceRepository, WorkspaceMembershipRepository workspaceMembershipRepository, UserRepository userRepository, ContentRepository contentRepository) {
         this.workspaceRepository = workspaceRepository;
         this.workspaceMembershipRepository = workspaceMembershipRepository;
         this.userRepository = userRepository;
+        this.contentRepository = contentRepository;
     }
 
     @Override
@@ -80,22 +85,46 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     public Optional<Workspace> addContentToWorkspace(Long workspaceId, Content content) throws AccessDeniedException {
-        String username= SecurityContextHolder.getContext().getAuthentication().getName();
-        User user=userRepository.findByUsername(username)
-                .orElseThrow(()-> new RuntimeException("User not found"));
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         Workspace workspace = workspaceRepository.findById(workspaceId)
                 .orElseThrow(() -> new RuntimeException("Workspace not found"));
 
-        boolean isMember=workspaceMembershipRepository
+        boolean isMember = workspaceMembershipRepository
                 .findByWorkspaceIdAndUserId(workspaceId, user.getId())
                 .isPresent();
 
-        if (!isMember){
+        if (!isMember) {
             throw new AccessDeniedException();
         }
-
         workspace.getContents().add(content);
+        content.setUploadedAt(LocalDateTime.now());
+        workspaceRepository.save(workspace);
+        return Optional.of(workspace);
+    }
+
+    @Override
+    public Optional<Workspace> deleteContentFromWorkspace(Long workspaceId, Long contentId) throws AccessDeniedException {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Workspace workspace = workspaceRepository.findById(workspaceId)
+                .orElseThrow(() -> new RuntimeException("Workspace not found"));
+
+        boolean isMember = workspaceMembershipRepository
+                .findByWorkspaceIdAndUserId(workspaceId, user.getId())
+                .isPresent();
+
+        if (!isMember) {
+            throw new AccessDeniedException();
+        }
+        Content toRemove = contentRepository.findById(contentId)
+                        .orElseThrow(() -> new ContentNotFoundException(contentId));
+        workspace.getContents().remove(toRemove);
+        workspaceRepository.save(workspace);
         return Optional.of(workspace);
     }
 }

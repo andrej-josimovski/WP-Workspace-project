@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public record DisplayContentDto(
+        Long id,
         String name,
         ContentType type,
         String description,
@@ -15,6 +16,7 @@ public record DisplayContentDto(
 
     public static DisplayContentDto from(Content content) {
         return new DisplayContentDto(
+                content.getId(),
                 content.getName(),
                 content.getType(),
                 content.getDescription(),

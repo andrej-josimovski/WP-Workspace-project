@@ -32,6 +32,12 @@ public class WorkspaceApplicationServiceImpl implements WorkspaceApplicationServ
     }
 
     @Override
+    public Optional<DisplayWorkspaceDto> deleteContent(Long workspaceId, Long contentId) throws AccessDeniedException {
+        return workspaceService.deleteContentFromWorkspace(workspaceId , contentId)
+                .map(DisplayWorkspaceDto::from);
+    }
+
+    @Override
     public List<DisplayWorkspaceDto> findAll() {
         return DisplayWorkspaceDto.from(workspaceService.findAll());
     }

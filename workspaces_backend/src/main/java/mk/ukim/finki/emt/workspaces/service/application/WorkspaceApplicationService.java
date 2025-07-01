@@ -1,6 +1,5 @@
 package mk.ukim.finki.emt.workspaces.service.application;
 
-import mk.ukim.finki.emt.workspaces.model.domain.Workspace;
 import mk.ukim.finki.emt.workspaces.model.dto.CreateContentDto;
 import mk.ukim.finki.emt.workspaces.model.dto.CreateWorkspaceDto;
 import mk.ukim.finki.emt.workspaces.model.dto.DisplayWorkspaceDto;
@@ -16,4 +15,5 @@ public interface WorkspaceApplicationService {
     Optional<DisplayWorkspaceDto> update(Long id, CreateWorkspaceDto createWorkspaceDto, Long requestingUserId) throws AccessDeniedException;
     void deleteById(Long id, Long requestingUserId) throws AccessDeniedException;
     Optional<DisplayWorkspaceDto> addContent(Long workspaceId, CreateContentDto createContentDto) throws AccessDeniedException;
+    Optional<DisplayWorkspaceDto> deleteContent(Long workspaceId, Long contentId) throws AccessDeniedException;
 }

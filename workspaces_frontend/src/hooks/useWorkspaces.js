@@ -35,38 +35,41 @@ const useWorkspaces = () => {
 
     const onEdit = useCallback((id, data) => {
         console.log("Editing workspace ID:", id);
-        workspaceRepository
+        return workspaceRepository
             .edit(id, data)
             .then(() => {
                 console.log(`Successfully edited the workspace with id ${id}.`);
                 fetchWorkspaces();
             })
-            .catch((error) => console.log(error));
     }, [fetchWorkspaces]);
 
     const onDelete = useCallback((id) => {
         console.log("Deleting workspace ID:", id);
-        workspaceRepository
+        return workspaceRepository
             .delete(id)
             .then(() => {
                 console.log(`Successfully deleted the workspace with id ${id}.`);
                 fetchWorkspaces();
             })
-            .catch((error) => console.log(error));
     }, [fetchWorkspaces]);
 
     const onAddContent = useCallback((id, data) => {
-        workspaceRepository
+        return workspaceRepository
             .addContent(id, data)
             .then(() => fetchWorkspaces())
-            .catch((error) => console.log(error))
+    }, [fetchWorkspaces]);
+
+    const onDeleteContent = useCallback((workspaceId, contentId) => {
+        return workspaceRepository
+            .deleteContent(workspaceId, contentId)
+            .then(() => fetchWorkspaces())
     }, [fetchWorkspaces]);
 
     useEffect(() => {
         fetchWorkspaces();
     }, [fetchWorkspaces]);
 
-    return {...state, onAdd: onAdd, onEdit: onEdit, onAddContent: onAddContent, onDelete: onDelete, fetchWorkspaces};
+    return {...state, onAdd: onAdd, onEdit: onEdit, onAddContent: onAddContent, onDeleteContent: onDeleteContent, onDelete: onDelete, fetchWorkspaces};
 
 };
 export default useWorkspaces;

@@ -30,7 +30,7 @@ const useMemberships = () => {
 
     const onCreateWorkspace = useCallback((name) => {
         return workspaceMembershipRepository
-            .createWorkspace(name)  // just name now
+            .createWorkspace(name)
             .then(() => {
                 fetchMemberships();
             })
@@ -44,7 +44,6 @@ const useMemberships = () => {
             .then(() => {
                 fetchMemberships();
             })
-            .catch((error) => console.log(error));
     }, [fetchMemberships]);
 
     const onDeleteMember = useCallback((workspaceId, memberId) => {
@@ -53,7 +52,6 @@ const useMemberships = () => {
             .then(() => {
                 fetchMemberships();
             })
-            .catch((error) => console.log(error));
     }, [fetchMemberships]);
 
 

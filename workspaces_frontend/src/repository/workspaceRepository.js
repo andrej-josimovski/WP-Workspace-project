@@ -18,6 +18,9 @@ const workspaceRepository = {
     },
     addContent: async (id, data) => {
         return await axiosInstance.post(`/workspace/add-content/${id}`, data);
+    },
+    deleteContent: async (workspaceId, contentId) => {
+        return await axiosInstance.delete(`/workspace/delete-content/${workspaceId}/${contentId}`)
     }
 }
 export default workspaceRepository;

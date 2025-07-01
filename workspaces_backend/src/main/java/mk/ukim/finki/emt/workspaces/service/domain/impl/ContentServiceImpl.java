@@ -30,9 +30,11 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public Optional<Content> save(Content content) {
         if (content.getName() == null || content.getName().isEmpty() ||
-                content.getType() == null ||
-                content.getUploadedAt() == null) {
+                content.getType() == null ) {
             throw new IllegalArgumentException("Invalid content data");
+        }
+        if (content.getUploadedAt() == null) {
+            content.setUploadedAt(java.time.LocalDateTime.now());
         }
         Content newContent = new Content(
                 content.getName(),

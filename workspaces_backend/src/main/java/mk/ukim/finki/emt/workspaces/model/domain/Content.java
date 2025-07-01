@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class Content {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     private String name;
@@ -27,6 +27,10 @@ public class Content {
 
     public Content() {
 
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

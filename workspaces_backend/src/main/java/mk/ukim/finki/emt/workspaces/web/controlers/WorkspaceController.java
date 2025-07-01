@@ -53,7 +53,13 @@ public class WorkspaceController {
         return workspaceApplicationService.addContent(workspaceId, createContentDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
+    @DeleteMapping("/delete-content/{workspaceId}/{contentId}")
+    public ResponseEntity<DisplayWorkspaceDto> deleteContent(@PathVariable Long workspaceId, @PathVariable Long contentId) throws AccessDeniedException {
+        return workspaceApplicationService.deleteContent(workspaceId, contentId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Updates an existing workspace", description = "Updates a workspace by its ID.")

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "react-router";
+import {Link} from "react-router-dom";
 import {AppBar, Box, Button, IconButton, Toolbar, Typography} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import "./Header.css";
@@ -25,7 +25,7 @@ const Header = () => {
                         <MenuIcon/>
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{mr: 3}}>
-                        E-SHOP
+                        Workspace Management
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: "none", md: "flex"}}}>
                         {pages.map((page) => (
